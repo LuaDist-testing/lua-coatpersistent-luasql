@@ -53,8 +53,8 @@ is( first.name, 'Joe' )
 error_like( [[local first = Person.find_by_age()()]],
             "Cannot find without a value" )
 
-local nb = 0
-for p in Person.find() do
+nb = 0
+for _ in Person.find() do
     nb = nb + 1
 end
 is( nb, 3, "3 items returned" )

@@ -36,7 +36,7 @@ ok( mc.has( Person, 'id' ), "field id" )
 ok( mc.has( Person, 'name' ), "field name" )
 ok( mc.has( Person, 'age' ), "field age" )
 
-john = Person { name = 'John', age = 23 }
+local john = Person { name = 'John', age = 23 }
 is( john:type(), 'Person', "Person" )
 ok( john:isa 'Person' )
 
@@ -44,7 +44,7 @@ is( john.id, nil, "john.id is nil" )
 ok( john:save(), "john:save() --> insert" )
 is( john.id, 1, "john.id is 1" )
 
-brenda = Person { name = 'Brenda', age = 22 }
+local brenda = Person { name = 'Brenda', age = 22 }
 is( brenda.id, nil, "brenda.id is nil" )
 ok( brenda:save(), "brenda:save()" )
 is( brenda.id, 2, "brenda.id is 2" )
@@ -55,7 +55,7 @@ ok( p:isa 'Person', "it is a Person" )
 is( p.name, 'John', "it is John" )
 is( p.age, 23 )
 
-local p = Person.find_by_name('Brenda')()
+p = Person.find_by_name('Brenda')()
 ok( p, "Person.find_by_name returns something" )
 ok( p:isa 'Person', "it is a Person" )
 is( p.name, 'Brenda', "it is Brenda" )

@@ -8,6 +8,8 @@ if not require_ok 'Coat.Persistent' then
     BAIL_OUT "no lib"
 end
 
+diag(require'dado'._VERSION)
+
 local m = require 'Coat.Persistent'
 type_ok( m, 'table' )
 is( m, package.loaded['Coat.Persistent'] )

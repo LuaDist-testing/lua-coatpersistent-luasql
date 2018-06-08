@@ -81,7 +81,7 @@ is( p.avatar_id, a.id, "p.avatar_id == a.id" )
 
 ok( p:save(), "p:save() -- with avatar" )
 
-p2 = Person.find(p.id)()
+local p2 = Person.find(p.id)()
 ok( p2.avatar, "p2.avatar is defined after a find" )
 is( p2.avatar.id, a.id, "p2.avatar.id == a.id" )
 

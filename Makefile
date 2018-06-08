@@ -4,7 +4,7 @@ VERSION := $(shell cd src && $(LUA) -e "m = require [[Coat.Persistent]]; print(m
 TARBALL := lua-coatpersistent-$(VERSION).tar.gz
 REV     := 1
 
-LUAVER  := 5.1
+LUAVER  := 5.3
 PREFIX  := /usr/local
 DPREFIX := $(DESTDIR)$(PREFIX)
 LIBDIR  := $(DPREFIX)/share/lua/$(LUAVER)
@@ -31,8 +31,7 @@ my @files = qw{MANIFEST}; \
 while (<>) { \
     chomp; \
     next if m{^\.}; \
-    next if m{^doc/\.}; \
-    next if m{^doc/google}; \
+    next if m{^debian/}; \
     next if m{^rockspec/}; \
     push @files, $$_; \
 } \
@@ -68,10 +67,7 @@ dist.info:
 tag:
 	git tag -a -m 'tag release $(VERSION)' $(VERSION)
 
-doc:
-	git read-tree --prefix=doc/ -u remotes/origin/gh-pages
-
-MANIFEST: doc
+MANIFEST:
 	git ls-files | perl -e '$(manifest_pl)' > MANIFEST
 
 $(TARBALL): MANIFEST
@@ -79,8 +75,6 @@ $(TARBALL): MANIFEST
 	perl -ne 'print qq{lua-CoatPersistent-$(VERSION)/$$_};' MANIFEST | \
 	    tar -zc -T - -f $(TARBALL)
 	rm lua-CoatPersistent-$(VERSION)
-	rm -rf doc
-	git rm doc/*
 
 dist: $(TARBALL)
 
@@ -91,6 +85,14 @@ rockspec: $(TARBALL)
 rock:
 	luarocks pack rockspec/lua-coatpersistent-luasql-$(VERSION)-$(REV).rockspec
 	luarocks pack rockspec/lua-coatpersistent-lsqlite3-$(VERSION)-$(REV).rockspec
+
+deb:
+	echo "lua-coatpersistent ($(shell git describe --dirty)) unstable; urgency=medium" >  debian/changelog
+	echo ""                         >> debian/changelog
+	echo "  * UNRELEASED"           >> debian/changelog
+	echo ""                         >> debian/changelog
+	echo " -- $(shell git config --get user.name) <$(shell git config --get user.email)>  $(shell date -R)" >> debian/changelog
+	fakeroot debian/rules clean binary
 
 ifdef LUA_PATH
   export LUA_PATH:=$(LUA_PATH);../test/?.lua
@@ -109,6 +111,11 @@ test.luasql:
 test.lsqlite3:
 	cd src.lsqlite3 && prove --exec=$(LUA) ../test/*.t
 
+luacheck:
+	luacheck --std=max --codes src --ignore 211/_ENV 212/t 421/cond
+	luacheck --std=max --codes src.lsqlite3 --ignore 211/_ENV 212/t 231/err
+	luacheck --std=min --config .test.luacheckrc test/*.t
+
 coverage:
 	rm -f src/luacov.stats.out src/luacov.report.out
 	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t
@@ -117,16 +124,18 @@ coverage:
 coveralls:
 	rm -f src/luacov.stats.out src/luacov.report.out
 	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t
-	cd src && luacov-coveralls -e ^/usr -e %.t$
+	cd src && luacov-coveralls -e /HERE/ -e %.t$
 
 README.html: README.md
 	Markdown.pl README.md > README.html
 
+gh-pages:
+	mkdocs gh-deploy --clean
+
 clean:
-	rm -rf doc
 	rm -f MANIFEST *.bak *.db src/luacov.*.out src/*.db src/*.png test/*.png *.rockspec README.html
 
 realclean: clean
 
-.PHONY: test rockspec CHANGES dist.info
+.PHONY: test rockspec deb CHANGES dist.info
 

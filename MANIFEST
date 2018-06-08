@@ -4,11 +4,10 @@ MANIFEST
 Makefile
 README.md
 dist.info
-doc/Makefile
-doc/doc.css
-doc/index.html
-doc/lsqlite3.html
-doc/persistent.html
+docs/index.md
+docs/persistent.md
+docs/sqlite3.md
+mkdocs.yml
 rockspec.lsqlite3.in
 rockspec.luasql.in
 src.lsqlite3/Coat/Persistent.lua

@@ -70,7 +70,7 @@ ok( p:isa 'Person' )
 is( p.people_id, 1, "primary_key people_id is set" )
 is( p.name, 'John', "name is set" )
 
-pp = Person.find_by_name 'John'()
+local pp = Person.find_by_name 'John'()
 is( pp.name, 'John', "find_by_name works" )
 
 pp = Person.find(1)()
@@ -85,7 +85,7 @@ local car = Car.create{ color = 'red', max_speed = 180 }
 ok( car:isa 'Car', "car created" )
 
 p.its_car = car
-c = p.its_car
+local c = p.its_car
 is( car.c_id, c.c_id )
 ok( p:save(), "p:save() with car" )
 

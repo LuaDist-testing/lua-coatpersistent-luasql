@@ -1,5 +1,9 @@
 Revision history for lua-CoatPersistent
 
+0.2.2  Sat Jan 20 19:30:00 2018
+	+ shadow _ENV
+	+ add Debian package infrastructure
+
 0.2.1  Mon Nov  3 20:30:00 2014
 	+ 2 variants = 2 rockspec
 

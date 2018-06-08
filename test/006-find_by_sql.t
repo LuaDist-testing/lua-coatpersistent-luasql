@@ -47,7 +47,7 @@ for p in Person.find_by_sql "select * from person where name like 'Jo%'" do
 end
 is( nb, 2, "2 items returned", find_by_sql )
 
-local nb = 0
+nb = 0
 for p in Person.find "name like 'Jo%'" do
     ok( p:isa 'Person' )
     nb = nb + 1

@@ -8,7 +8,6 @@ local rawget = rawget
 local rawset  = rawset
 local require = require
 local setmetatable = setmetatable
-local type = type
 local _G = _G
 local Coat = require 'Coat'
 local Meta = require 'Coat.Meta.Class'
@@ -17,12 +16,12 @@ local dado = require 'dado.sql'
 local error = Coat.error
 local argerror = Coat.argerror
 local checktype = Coat.checktype
-local class = Coat.class
+local cclass = Coat.class
 local has = Coat.has
 local setfenv = Coat.setfenv
 local type = Coat.type
 
-_ENV = nil
+local _ENV = nil
 local _M = {}
 
 local drv = {}
@@ -308,7 +307,7 @@ function _G.persistent (modname, options)
     checktype('persistent', 2, options, 'table')
     local primary_key = options.primary_key or 'id'
     local table_name = options.table_name or modname:gsub('%.', '_')
-    local M = class(modname)
+    local M = cclass(modname)
     M._PRIMARY_KEY = primary_key
     M._TABLE_NAME = table_name:lower()
     M._ATTR_P = { primary_key }
@@ -326,9 +325,9 @@ function _G.persistent (modname, options)
     setfenv(2, M)
 end
 
-_M._VERSION = "0.2.1"
+_M._VERSION = "0.2.2"
 _M._DESCRIPTION = "lua-CoatPersistent : an ORM for lua-Coat"
-_M._COPYRIGHT = "Copyright (c) 2010-2014 Francois Perrad"
+_M._COPYRIGHT = "Copyright (c) 2010-2018 Francois Perrad"
 return _M
 --
 -- This library is licensed under the terms of the MIT/X11 license,
